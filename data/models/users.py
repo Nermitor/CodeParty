@@ -1,12 +1,13 @@
 import datetime
 
+from flask_login import UserMixin
 from sqlalchemy import Column, DateTime, String, Integer, Boolean
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from ..db_session import SqlAlchemyBase
 
 
-class User(SqlAlchemyBase):
+class User(SqlAlchemyBase, UserMixin):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
     nickname = Column(String, nullable=False, index=True)

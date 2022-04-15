@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center">
+        <form method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <h3>Регистрация</h3>
+            {{ form.nickname(placeholder="Ваш username", class='form-control') }}<br>
+            {{ form.email(placeholder="Ваш email", class="form-control") }}<br>
+            {{ form.password(placeholder="Пароль", class="form-control") }}<br>
+            {{ form.repeat_password(placeholder='Повторите пароль', class='form-control') }}<br>
+            {{ form.submit(class='btn btn-primary') }}
+        </form>
+        {{ message }}
+    </div>
+{% endblock %}

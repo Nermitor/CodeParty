@@ -1,6 +1,6 @@
-from flask import render_template, flash
-from flask_login import login_required
+from flask import render_template, flash, url_for
 
+from core.mailing.mail import MailMessage
 from core.token import generate_confirmation_token, confirm_token
 from data import db_session
 from data.models.users import User
@@ -11,7 +11,7 @@ from .models.forms.register import RegisterForm
 @authorisation.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    cur_template = "authorisation/index.html"
+    cur_template = "authorisation/register.html"
     if form.validate_on_submit():
         if form.password.data != form.repeat_password.data:
             return render_template(cur_template, form=form, message="Пароли не совпадают")
@@ -29,21 +29,39 @@ def register():
         db_sess.add(user)
         db_sess.commit()
         token = generate_confirmation_token(user.email)
+        confirm_url = url_for("authorisation.confirm_email", token=token, _external=True)
+        template = render_template("authorisation/confirm_email_mail.html", confirm_url=confirm_url)
+        title = "Please confirm your email"
+        mail = MailMessage(
+            title=title,
+            recipients=[user.email],
+            template=template
+        )
+        mail.send()
+        flash('A confirmation email has been sent via email.', 'success')
+        return "OK"
+
+    print(form.errors)
+    return render_template("authorisation/register.html", form=form)
 
 
 @authorisation.route("/authorisation/token/<token>")
-@login_required
 def confirm_email(token):
     try:
         email = confirm_token(token)
     except:
         flash('Ссылка для подтверждения истекла или неверна', 'danger')
     db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.email == email).first_or_404()
-    if user.confirmed:
-        flash("Аккаунт уже подтверждён. Войдите", "success")
-    else:
-        user.confirmed = True
-        db_sess.commit()
-        flash("Аккаунт был подтверждён.", "success")
-    return ...
+    user = db_sess.query(User).filter(User.email == email).first()
+    if user:
+        if user.confirmed:
+            flash("Аккаунт уже подтверждён. Войдите", "success")
+        else:
+            user.confirmed = True
+            db_sess.commit()
+            flash("Аккаунт был подтверждён.", "success")
+        return "ОК"
+
+
+# @authorisation.route("/login", methods=['POST', "GET"])
+# def login():
