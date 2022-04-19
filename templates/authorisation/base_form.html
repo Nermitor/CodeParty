@@ -1,0 +1,14 @@
+{% extends "base_without_sidebar.html" %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center reg__container">
+        <form method="post" novalidate>
+            {{ form.hidden_tag() }}
+            {% block form_data %}{% endblock %}
+            {{ message }}
+        </form>
+        
+    </div>
+{% endblock %}

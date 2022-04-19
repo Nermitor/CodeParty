@@ -1,0 +1,10 @@
+{% extends "base_with_sidebar.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+    <h1>Профиль</h1><br>
+    <h3>{{ user.nickname }}</h3>
+    <br><h5>{{ user.about }}</h5>
+    <br><h5>{{ user.languages }}</h5>
+{% endblock %}

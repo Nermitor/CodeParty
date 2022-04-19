@@ -1,18 +1,17 @@
-{% extends "base.html" %}
-
+{% extends "authorisation/base_form.html" %}
 {% block title %}Регистрация{% endblock %}
-
-{% block content %}
-    <div class="container d-flex justify-content-center">
-        <form method="post" novalidate>
-            {{ form.hidden_tag() }}
-            <h3>Регистрация</h3>
-            {{ form.nickname(placeholder="Ваш username", class='form-control') }}<br>
-            {{ form.email(placeholder="Ваш email", class="form-control") }}<br>
-            {{ form.password(placeholder="Пароль", class="form-control") }}<br>
-            {{ form.repeat_password(placeholder='Повторите пароль', class='form-control') }}<br>
-            {{ form.submit(class='btn btn-primary') }}
-        </form>
-        {{ message }}
+{% block form_data %}
+    <h3>Регистрация</h3>
+    {{ form.nickname(placeholder="Ваш username", class='form-control') }}<br>
+    {{ form.email(placeholder="Ваш email", class="form-control") }}<br>
+    {{ form.password(placeholder="Пароль", class="form-control") }}<br>
+    {{ form.repeat_password(placeholder='Повторите пароль', class='form-control') }}<br>
+    <div class="form-group">
+        {{ form.languages.label() }}
+        {{ form.languages(placeholder='Чем вы владеете?', class='form-control') }}
     </div>
+    {{ form.about(placeholder="Расскажите о себе", class='form-control') }}<br>
+    {{ form.submit(class='btn btn-primary') }}
+    <br><br>
+    <h6>Уже есть аккаунт? <a href="/login">Войти </a></h6>
 {% endblock %}

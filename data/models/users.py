@@ -1,7 +1,7 @@
 import datetime
 
 from flask_login import UserMixin
-from sqlalchemy import Column, DateTime, String, Integer, Boolean
+from sqlalchemy import Column, DateTime, String, Integer, Boolean, orm, Text
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from ..db_session import SqlAlchemyBase
@@ -15,6 +15,10 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = Column(String, nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.now)
     confirmed = Column(Boolean, default=False)
+    posts = orm.relation("Post")
+    posts_count = Column(Integer, default=0)
+    about = Column(Text, nullable=True)
+    languages = Column(String, nullable=True)
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

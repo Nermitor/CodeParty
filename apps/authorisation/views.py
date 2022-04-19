@@ -1,10 +1,12 @@
-from flask import render_template, flash, url_for
+from flask import render_template, flash, url_for, redirect
+from flask_login import login_user
 
 from core.mailing.mail import MailMessage
 from core.token import generate_confirmation_token, confirm_token
 from data import db_session
 from data.models.users import User
 from .app import authorisation
+from .models.forms.login import LoginForm
 from .models.forms.register import RegisterForm
 
 
@@ -18,12 +20,12 @@ def register():
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template(cur_template, form=form, message="Аккаунт с этим email уже существует")
-        if db_sess.query(User).filter(User.nickname == form.nickname.data).first():
-            return render_template(cur_template, form=form, message="Аккаунт с таким именем уже существует")
 
         user = User(
             email=form.email.data,
             nickname=form.nickname.data,
+            about=form.about.data,
+            languages=form.languages.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -41,7 +43,6 @@ def register():
         flash('A confirmation email has been sent via email.', 'success')
         return "OK"
 
-    print(form.errors)
     return render_template("authorisation/register.html", form=form)
 
 
@@ -60,8 +61,17 @@ def confirm_email(token):
             user.confirmed = True
             db_sess.commit()
             flash("Аккаунт был подтверждён.", "success")
-        return "ОК"
+            login_user(user)
+        return redirect('/profile')
 
 
-# @authorisation.route("/login", methods=['POST', "GET"])
-# def login():
+@authorisation.route("/login", methods=['POST', "GET"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+
+    return render_template("authorisation/login.html", form=form)
