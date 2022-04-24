@@ -33,4 +33,8 @@ class BaseConfig(object):
     # mail accounts
     MAIL_DEFAULT_SENDER = 'codepartycompany@gmail.com'
 
+    # file upload
+    MAX_CONTENT_LENGTH = 1024 * 1024 + 1
+    AVATAR_FILE_EXTENSIONS = ['jpg', 'png', 'gif']
+
 

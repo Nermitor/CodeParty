@@ -1,2 +1,2 @@
-from .models import users
-from .models import posts
+from .models.users import User, followers
+from .models.posts import Post

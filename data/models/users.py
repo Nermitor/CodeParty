@@ -1,10 +1,21 @@
 import datetime
 
+import sqlalchemy
+from flask import url_for, make_response
 from flask_login import UserMixin
-from sqlalchemy import Column, DateTime, String, Integer, Boolean, orm, Text
+from sqlalchemy import Column, DateTime, String, Integer, Boolean, orm, Text, ForeignKey, BLOB
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from app_settings import app
+from .. import db_session
 from ..db_session import SqlAlchemyBase
+
+followers = sqlalchemy.Table(
+    'followers',
+    SqlAlchemyBase.metadata,
+    Column('follower_id', Integer, ForeignKey('users.id')),
+    Column('followed_id', Integer, ForeignKey('users.id'))
+)
 
 
 class User(SqlAlchemyBase, UserMixin):
@@ -19,9 +30,73 @@ class User(SqlAlchemyBase, UserMixin):
     posts_count = Column(Integer, default=0)
     about = Column(Text, nullable=True)
     languages = Column(String, nullable=True)
+    avatar = Column(BLOB, nullable=True)
+
+    followed = orm.relation(
+        "User", secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=orm.backref('followers', lazy='dynamic'), lazy='dynamic'
+    )
+
+    def __repr__(self):
+        return f"(User №{self.id} | name = '{self.nickname}' | email = {self.email} |)"
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    @property
+    def followers(self):
+        return self.followed.filter(followers.c.followed_id == self.id)
+
+    @property
+    def follows(self):
+        return self.followed.filter(followers.c.follower_id == self.id)
+
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
+
+    def common_follows(self, user):
+        return self.follows().intersect(user.Follows.follows())
+
+    def get_avatar(self):
+        if not self.avatar:
+            try:
+                with app.open_resource(app.root_path + url_for('static', filename='img/default.png'), 'rb') as f:
+                    return f.read()
+            except FileNotFoundError:
+                print("Файла нет")
+            except Exception as e:
+                print(e)
+        return self.avatar
+
+    def set_avatar(self, avatar):
+        db_sess = db_session.create_session()
+        self.avatar = avatar
+        db_sess.commit()
+
+    @staticmethod
+    def verify_ext(filename):
+        ext = filename.rsplit('.', 1)[1]
+        if ext.lower() in app.config['AVATAR_FILE_EXTENSIONS']:
+            return True
+        return False
+
+
+
+
+
+
+

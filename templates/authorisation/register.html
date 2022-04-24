@@ -11,6 +11,10 @@
         {{ form.languages(placeholder='Чем вы владеете?', class='form-control') }}
     </div>
     {{ form.about(placeholder="Расскажите о себе", class='form-control') }}<br>
+    <div class="form-group">
+        {{ form.avatar.label() }}
+        {{ form.avatar(class='form-control') }}<br>
+    </div>
     {{ form.submit(class='btn btn-primary') }}
     <br><br>
     <h6>Уже есть аккаунт? <a href="/login">Войти </a></h6>

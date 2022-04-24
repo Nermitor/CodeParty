@@ -3,8 +3,23 @@
 {% block title %}Профиль{% endblock %}
 
 {% block content %}
-    <h1>Профиль</h1><br>
-    <h3>{{ user.nickname }}</h3>
-    <br><h5>{{ user.about }}</h5>
-    <br><h5>{{ user.languages }}</h5>
+    <div class="beautiful-border">
+        <h1 style="text-align: center">Профиль</h1><br>
+        <img src="avatar/{{ user.id }}" alt="Не удалось загрузить изображение профиля"
+        width="200" height="200">
+        <h3>{{ user.nickname }}</h3>
+        <br><h5>О себе: {{ user.about }}</h5>
+        <br><h5>Владею: {{ user.languages }}</h5>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6">
+                    <a href="#">{{ user.posts_count }} постов</a>
+                </div>
+                <div class="col-6">
+                    <a href="#">{{ 0 }} Подписок</a>
+                </div>
+            </div>
+        </div>
+        <a href="/logout">Выйти</a>
+    </div>
 {% endblock %}

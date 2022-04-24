@@ -46,8 +46,10 @@ form.form-center {
 }
 
 .content-right {
+    margin-top: 5px;
     float: right;
-    width: 74%;
+    width: 73%;
+    margin-right: 1%;
 }
 
 .content-center {
@@ -56,11 +58,14 @@ form.form-center {
 }
 
 .menu1 {
-    background-color: #13082f;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 10px;
     list-style-type: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.left-navbar-li{
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .left-navbar-li a:hover {
@@ -76,7 +81,13 @@ form.form-center {
     background-color: #13082f !important;
     color: white;
 }
-.form-control
+.beautiful-border{
+    background-color: #13082f;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    padding: 20px 10px;
+}
 
 
 .brand:hover{

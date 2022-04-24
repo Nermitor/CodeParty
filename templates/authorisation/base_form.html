@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container d-flex justify-content-center reg__container">
-        <form method="post" novalidate>
+        <form method="post" novalidate enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             {% block form_data %}{% endblock %}
             {{ message }}
