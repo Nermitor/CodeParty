@@ -8,7 +8,7 @@ body {
     box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6, a, label {
+h1, h2, h3, h4, h5, h6, a, label, pre {
     color: #6c757d;
 }
 
@@ -92,4 +92,8 @@ form.form-center {
 
 .brand:hover{
     color: inherit;
+}
+
+.post{
+
 }

@@ -2,6 +2,13 @@ from flask import Flask, redirect
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from config import BaseConfig
+import locale
+
+locale.setlocale(
+    category=locale.LC_ALL,
+    locale="Russian"
+)
+
 
 app = Flask(__name__)
 app.config.update(BaseConfig.__dict__)

@@ -6,28 +6,31 @@ from data.models.users import User
 from .app import profile
 
 
-@profile.route("/profile/id<uid>")
+@profile.route("/id<uid>/")
 def profile_on_id(uid):
+    if current_user.is_authenticated:
+        if current_user.id == uid:
+            return redirect('/profile')
     db_sess = db_session.create_session()
     user = db_sess.query(User).get(uid)
     if user:
-        print(user.languages)
         return render_template("profile/profile.html", user=user)
 
 
 @profile.route("/profile/")
+@login_required
 def profile_route1():
-    return redirect('/profile/id{0}'.format(current_user.id))
+    return render_template("profile/profile.html", user=current_user)
 
 
-@profile.route("/logout")
+@profile.route("/logout/")
 @login_required
 def logout():
     logout_user()
     return redirect('/')
 
 
-@profile.route('/profile/avatar/<user_id>')
+@profile.route('/id<user_id>/avatar/')
 def avatar(user_id):
     db_sess = db_session.create_session()
     user_avatar = db_sess.query(User).get(user_id).get_avatar()

@@ -13,6 +13,6 @@ class Post(SqlAlchemyBase):
     created_date = Column(DateTime, default=datetime.datetime.now)
     title = Column(String, nullable=True)
     code = Column(Text, nullable=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    user = orm.relation("User")
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    comments = orm.relation("Comment", backref='post', lazy='dynamic')
 

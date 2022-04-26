@@ -17,6 +17,13 @@ followers = sqlalchemy.Table(
     Column('followed_id', Integer, ForeignKey('users.id'))
 )
 
+recommendations = sqlalchemy.Table(
+    'recommendations',
+    SqlAlchemyBase.metadata,
+    Column('recommended_for', Integer, ForeignKey('users.id')),
+    Column('who_recommended', Integer, ForeignKey('users.id'))
+)
+
 
 class User(SqlAlchemyBase, UserMixin):
     __tablename__ = "users"
@@ -26,17 +33,27 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = Column(String, nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.now)
     confirmed = Column(Boolean, default=False)
-    posts = orm.relation("Post")
-    posts_count = Column(Integer, default=0)
+
     about = Column(Text, nullable=True)
     languages = Column(String, nullable=True)
     avatar = Column(BLOB, nullable=True)
+
+    posts = orm.relation("Post", backref='author', lazy='dynamic')
+    comments = orm.relation("Comment", backref='author', lazy='dynamic')
 
     followed = orm.relation(
         "User", secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=orm.backref('followers', lazy='dynamic'), lazy='dynamic'
+    )
+
+    recommendations = orm.relation(
+        "User", secondary=recommendations,
+        primaryjoin=(recommendations.c.recommended_for == id),
+        secondaryjoin=(recommendations.c.who_recommended == id),
+        backref=orm.backref("recommended_for", lazy='dynamic'),
+        lazy='dynamic'
     )
 
     def __repr__(self):

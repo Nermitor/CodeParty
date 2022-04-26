@@ -1,0 +1,12 @@
+{% extends "base_with_sidebar.html" %}
+{% import "posts/post_body.html" as post_body %}
+
+{% block content %}
+    <h3>Посты {{ user.nickname }}</h3>
+    {% if current_user.id == user.id %}
+        <a href="http://127.0.0.1:5000/profile/new_post">Новый пост</a>
+    {% endif %}
+    {% for post in posts %}
+        {{ post_body.make_post(post) }}
+    {% endfor %}
+{% endblock %}

@@ -37,4 +37,7 @@ class BaseConfig(object):
     MAX_CONTENT_LENGTH = 1024 * 1024 + 1
     AVATAR_FILE_EXTENSIONS = ['jpg', 'png', 'gif']
 
+    # server routing
+    SERVER = '127.0.0.1:5000'
+
 

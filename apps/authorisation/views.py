@@ -80,5 +80,6 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
+        return redirect('/profile')
 
     return render_template("authorisation/login.html", form=form)
