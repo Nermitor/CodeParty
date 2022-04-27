@@ -1,7 +1,8 @@
 {% macro make_post(post) %}
     <div class="post beautiful-border">
         <h2 style="text-align: center">{{ post.title }}</h2>
-        <pre>{{ post.code }}</pre><br><br>
+        <h6>{{ post.language.full_name }}</h6>
+        <pre><code class="language-{{ post.language.special_name }}">{{ post.code }}</code></pre><br>
         {% with date_format = "%d %B" %}
             {% if post.created_date.year != post.created_date.now().year %}
                 {% set date_format = date_format + " %Y" %}

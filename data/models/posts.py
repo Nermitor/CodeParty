@@ -4,6 +4,7 @@ from flask_login import UserMixin
 from sqlalchemy import Column, DateTime, String, Integer, Boolean, Text, orm, ForeignKey
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from .languages import Language
 from ..db_session import SqlAlchemyBase
 
 
@@ -15,4 +16,7 @@ class Post(SqlAlchemyBase):
     code = Column(Text, nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"), index=True)
     comments = orm.relation("Comment", backref='post', lazy='dynamic')
+    language_id = Column(Integer, ForeignKey('languages.id'))
+    language = orm.relation("Language", uselist=False)
+
 
