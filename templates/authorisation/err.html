@@ -1,0 +1,5 @@
+{% macro err(errors) %}
+    {% for error in errors %}
+        <h5>{{ error }}</h5>
+    {% endfor %}
+{% endmacro %}

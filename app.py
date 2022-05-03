@@ -29,5 +29,6 @@ if __name__ == '__main__':
     t2 = Thread(target=app_main)
     t1 = Thread(target=index_main)
     t1.start()
+    t2.start()
     t1.join()
     t2.join()

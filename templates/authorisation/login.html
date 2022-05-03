@@ -1,12 +1,16 @@
 {% extends "authorisation/base_form.html" %}
+{% from "authorisation/err.html" import err%}
 
 {% block title %}Вход{% endblock %}
 
 {% block form_data %}
     <h3>Вход</h3>
     {{ form.email(placeholder="Ваш email", class="form-control") }}<br>
+    {{ err(form.email.errors) }}
     {{ form.password(placeholder="Пароль", class="form-control") }}<br>
+    {{ err(form.password.errors) }}
     {{ form.submit(class='btn btn-primary', value='Вход') }}
+    <h5>{{ message }}</h5>
     <br><br>
     <h6>Впервые на сайте? <a href="/register">Зарегистрироваться</a></h6>
 {% endblock %}

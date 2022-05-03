@@ -47,8 +47,7 @@ def register():
                 template=render_template("authorisation/confirm_email_mail.html", confirm_url=confirm_url)
             )
         mail.send()
-        flash('A confirmation email has been sent via email.', 'success')
-        return "OK"
+        return render_template("authorisation/mail_is_send.html", email=user.email)
 
     return render_template("authorisation/register.html", form=form)
 
@@ -67,7 +66,6 @@ def confirm_email(token):
             else:
                 user.confirmed = True
                 db_sess.commit()
-                flash("Аккаунт был подтверждён.", "success")
                 login_user(user)
             return redirect('/profile')
 
@@ -80,6 +78,8 @@ def login():
             user = db_sess.query(User).filter(User.email == form.email.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user)
+            else:
+                return render_template("authorisation/login.html", form=form, message='Неправильный пароль или почта')
         return redirect('/profile')
 
     return render_template("authorisation/login.html", form=form)
