@@ -1,5 +1,4 @@
 import datetime
-
 import sqlalchemy
 from flask import url_for, make_response
 from flask_login import UserMixin
@@ -7,6 +6,7 @@ from sqlalchemy import Column, DateTime, String, Integer, Boolean, orm, Text, Fo
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app_settings import app
+from .posts import Post
 from .. import db_session
 from ..db_session import SqlAlchemyBase
 
@@ -59,6 +59,9 @@ class User(SqlAlchemyBase, UserMixin):
     def __repr__(self):
         return f"(User №{self.id} | name = '{self.nickname}' | email = {self.email} |)"
 
+    def __str__(self):
+        return f"(User №{self.id} | name = '{self.nickname}' | email = {self.email} |)"
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
@@ -86,7 +89,7 @@ class User(SqlAlchemyBase, UserMixin):
             followers.c.followed_id == user.id).count() > 0
 
     def common_follows(self, user):
-        return self.follows().intersect(user.Follows.follows())
+        return self.follows.intersect(user.follows)
 
     def get_avatar(self):
         if not self.avatar:
@@ -100,9 +103,14 @@ class User(SqlAlchemyBase, UserMixin):
         return self.avatar
 
     def set_avatar(self, avatar):
-        db_sess = db_session.create_session()
-        self.avatar = avatar
-        db_sess.commit()
+        with db_session.create_session() as db_sess:
+            self.avatar = avatar
+            db_sess.commit()
+
+    def followed_posts(self):
+        with db_session.create_session() as db_sess:
+            return db_sess.query(Post).join(followers, (followers.c.followed_id == Post.user_id)).filter(
+                followers.c.follower_id == self.id).order_by(Post.created_date.desc()).limit(50)
 
     @staticmethod
     def verify_ext(filename):

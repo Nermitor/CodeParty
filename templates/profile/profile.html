@@ -6,20 +6,42 @@
     <div class="beautiful-border">
         <h1 style="text-align: center">Профиль</h1><br>
         <img src="/id{{ user.id }}/avatar" alt="Не удалось загрузить изображение профиля"
-        width="200" height="200">
+             width="200" height="200">
         <h3>{{ user.nickname }}</h3>
         <br><h5>О себе: {{ user.about }}</h5>
         <br><h5>Владею: {{ user.languages }}</h5>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-6">
-                    <a href="http://127.0.0.1:5000/id{{ user.id }}/posts/">{{ user.posts.count() }} постов</a>
+                <div class="col-4">
+                    <h5><a href="/id{{ user.id }}/posts/">{{ user.posts.count() }} постов</a></h5>
                 </div>
-                <div class="col-6">
-                    <a href="#">{{ 0 }} Подписок</a>
+                <div class="col-4">
+                    <h5> <a href="follows">{{ user.follows.count() }} </a> Подписок
+                        {% if current_user.id != user.id %}
+                            (<a href="common_follows"> {{ current_user.common_follows(user).count() }}</a> Общих)
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="col-4">
+                    <h5><a href="followed">{{ user.followers.count() }} Подписчиков</a></h5>
                 </div>
             </div>
         </div>
-        <a href="/logout">Выйти</a>
+        <br><br>
+        <div class="container d-flex justify-content-center">
+            {% if current_user.id != user.id %}
+                <h5><a href="subscribe">
+                    {% if current_user.is_following(user) %}
+                        Отписаться
+                    {% else %}
+                        Подписаться
+                    {% endif %}
+                </a></h5><br>
+            {% else %}
+                <div class="logout_btn">
+                    <h5><a href="/logout">Выйти</a></h5>
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

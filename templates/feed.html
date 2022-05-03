@@ -2,10 +2,7 @@
 {% import "posts/post_body.html" as post_body %}
 
 {% block content %}
-    <h3>Посты {{ user.nickname }}</h3>
-    {% if current_user.id == user.id %}
-        <a href="/profile/new_post">Новый пост</a>
-    {% endif %}
+    <h3>Новости</h3>
     {% for post in posts %}
         {{ post_body.make_post(post) }}
     {% endfor %}

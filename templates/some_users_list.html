@@ -1,0 +1,10 @@
+{% extends "base_with_sidebar.html" %}
+{% import "user_view_body.html" as user_view_body %}
+
+
+{% block content %}
+    <h3>{% block title2 %}{% endblock %}</h3>
+    {% for rec in users_list %}
+        {{ user_view_body.user_view(rec) }}
+    {% endfor %}
+{% endblock %}

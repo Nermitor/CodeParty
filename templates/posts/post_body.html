@@ -1,16 +1,29 @@
 {% macro make_post(post) %}
     <div class="post beautiful-border">
+        <div>
+            <div class="container" style="margin-left: 0">
+                <div class="row">
+                    <div class="col-2" style="padding-right: 0; max-width: 80px">
+                        <img src="/id{{ post.author.id }}/avatar/" width="60" height="60">
+                    </div>
+                    <div class="col-4" style="padding-left: 0">
+                        <div>
+                            <h4><a href="/id{{ post.author.id }}">{{ post.author.nickname }}</a></h4>
+                            {% with date_format = "%d %B" %}
+                                {% if post.created_date.year != post.created_date.now().year %}
+                                    {% set date_format = date_format + " %Y" %}
+                                {% endif %}
+                                <h6>{{ post.created_date.strftime(date_format + " в %H:%M") }}</h6>
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
         <h2 style="text-align: center">{{ post.title }}</h2>
         <h6>{{ post.language.full_name }}</h6>
-        <pre><code class="language-{{ post.language.special_name }}">{{ post.code }}</code></pre><br>
-        {% with date_format = "%d %B" %}
-            {% if post.created_date.year != post.created_date.now().year %}
-                {% set date_format = date_format + " %Y" %}
-            {% endif %}
-            <h6>{{ post.created_date.strftime(date_format) }} от
-                <a href="http://127.0.0.1:5000/id{{ post.author.id }}">{{ post.author.nickname }}</a>
-            </h6>
-        {% endwith %}
-
+        <pre><code class="language-{{ post.language.special_name }}">{{ post.code }}</code></pre>
+        <br>
     </div>
 {% endmacro %}

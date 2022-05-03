@@ -1,5 +1,3 @@
-from sqlalchemy.orm.dynamic import AppenderQuery
-
 from data.db_session import create_session
 from data.__all_models import User, recommendations
 from .get import get_recommendation
@@ -22,6 +20,5 @@ def index():
                     user2.recommendations.append(user1)
                 indexed.add((i, j))
         print(f"Составлены рекомендации для пользователя {user1.nickname}")
-
     db_sess.commit()
 

@@ -1,6 +1,6 @@
-from app import app
-
-
-def absolute(link):
-    return app.config['SERVER'] + link
+# from app import app
+#
+#
+# def absolute(link):
+#     return app.config['SERVER'] + link
 

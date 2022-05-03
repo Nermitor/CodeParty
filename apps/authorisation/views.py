@@ -18,34 +18,34 @@ def register():
     if form.validate_on_submit():
         if form.password.data != form.repeat_password.data:
             return render_template(cur_template, form=form, message="Пароли не совпадают")
-        db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template(cur_template, form=form, message="Аккаунт с этим email уже существует")
+        with db_session.create_session() as db_sess:
+            if db_sess.query(User).filter(User.email == form.email.data).first():
+                return render_template(cur_template, form=form, message="Аккаунт с этим email уже существует")
 
-        user = User(
-            email=form.email.data,
-            nickname=form.nickname.data,
-            about=form.about.data,
-            languages=form.languages.data
-        )
+            user = User(
+                email=form.email.data,
+                nickname=form.nickname.data,
+                about=form.about.data,
+                languages=form.languages.data
+            )
 
-        if form.avatar.data:
-            on_form_name = form.avatar.name
-            raw_name = form.avatar.data.filename
-            if user.verify_ext(raw_name):
-                img = request.files[on_form_name].read(app.config['MAX_CONTENT_LENGTH'])
-                user.set_avatar(img)
+            if form.avatar.data:
+                on_form_name = form.avatar.name
+                raw_name = form.avatar.data.filename
+                if user.verify_ext(raw_name):
+                    img = request.files[on_form_name].read(app.config['MAX_CONTENT_LENGTH'])
+                    user.set_avatar(img)
 
-        user.set_password(form.password.data)
-        db_sess.add(user)
-        db_sess.commit()
-        token = generate_confirmation_token(user.email)
-        confirm_url = url_for("authorisation.confirm_email", token=token, _external=True)
-        mail = MailMessage(
-            title="Please confirm your email",
-            recipients=[user.email],
-            template=render_template("authorisation/confirm_email_mail.html", confirm_url=confirm_url)
-        )
+            user.set_password(form.password.data)
+            db_sess.add(user)
+            db_sess.commit()
+            token = generate_confirmation_token(user.email)
+            confirm_url = url_for("authorisation.confirm_email", token=token, _external=True)
+            mail = MailMessage(
+                title="Please confirm your email",
+                recipients=[user.email],
+                template=render_template("authorisation/confirm_email_mail.html", confirm_url=confirm_url)
+            )
         mail.send()
         flash('A confirmation email has been sent via email.', 'success')
         return "OK"
@@ -59,27 +59,27 @@ def confirm_email(token):
         email = confirm_token(token)
     except:
         flash('Ссылка для подтверждения истекла или неверна', 'danger')
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.email == email).first()
-    if user:
-        if user.confirmed:
-            flash("Аккаунт уже подтверждён. Войдите", "success")
-        else:
-            user.confirmed = True
-            db_sess.commit()
-            flash("Аккаунт был подтверждён.", "success")
-            login_user(user)
-        return redirect('/profile')
+    with db_session.create_session() as db_sess:
+        user = db_sess.query(User).filter(User.email == email).first()
+        if user:
+            if user.confirmed:
+                flash("Аккаунт уже подтверждён. Войдите", "success")
+            else:
+                user.confirmed = True
+                db_sess.commit()
+                flash("Аккаунт был подтверждён.", "success")
+                login_user(user)
+            return redirect('/profile')
 
 
 @authorisation.route("/login", methods=['POST', "GET"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.email == form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
+        with db_session.create_session() as db_sess:
+            user = db_sess.query(User).filter(User.email == form.email.data).first()
+            if user and user.check_password(form.password.data):
+                login_user(user)
         return redirect('/profile')
 
     return render_template("authorisation/login.html", form=form)

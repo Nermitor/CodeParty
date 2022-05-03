@@ -1,0 +1,18 @@
+{% macro user_view(user) %}
+    <div class="container" style="margin-left: 0">
+        <div class="row beautiful-border">
+            <div class="col-2" style="padding-right: 0; max-width: 80px">
+                <img src="/id{{ user.id }}/avatar/" width="60" height="60">
+            </div>
+            <div class="col-4" style="padding-left: 0">
+                <div>
+                    <h4><a href="/id{{ user.id }}">{{ user.nickname }}</a></h4>
+                    <h6>{{ user.about }}</h6>
+                </div>
+            </div>
+            <div class="col-10">
+                <a href=""></a>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

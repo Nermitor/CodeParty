@@ -6,6 +6,7 @@ from data import db_session
 from data.models.languages import Language
 
 
+
 class PostForm(FlaskForm):
     title = StringField("Название", validators=[DataRequired()])
     code = TextAreaField("Код", validators=[DataRequired()])

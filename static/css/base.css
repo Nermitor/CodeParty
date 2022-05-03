@@ -94,6 +94,28 @@ form.form-center {
     color: inherit;
 }
 
-.post{
+.logout_btn{
+    border-radius: 8px;
+    min-width: 80px;
+    background-color: #0f4b6e;
+}
+.logout_btn h5{
+    text-align: center;
+    color: white;
 
 }
+.logout_btn a{
+    text-decoration: none;
+}
+.logout_btn a:hover{
+    color: initial;
+}
+
+/*.logout_btn a{*/
+/*    background-color: #0474b2;*/
+/*    color: #ffffff;*/
+/*    text-decoration: none;*/
+/*    border-radius: 9px;*/
+/*    border-width: 17px;*/
+/*    width: 60px;*/
+/*}*/
