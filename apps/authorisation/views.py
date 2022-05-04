@@ -57,12 +57,12 @@ def confirm_email(token):
     try:
         email = confirm_token(token)
     except:
-        flash('Ссылка для подтверждения истекла или неверна', 'danger')
+        return 'Ссылка для подтверждения истекла или неверна'
     with db_session.create_session() as db_sess:
         user = db_sess.query(User).filter(User.email == email).first()
         if user:
             if user.confirmed:
-                flash("Аккаунт уже подтверждён. Войдите", "success")
+                return "Аккаунт уже подтверждён. Войдите"
             else:
                 user.confirmed = True
                 db_sess.commit()
