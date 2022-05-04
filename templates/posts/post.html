@@ -1,0 +1,11 @@
+{% if current_user.is_authenticated %}
+    {% extends "base_with_sidebar.html" %}
+{% else %}
+    {% extends "base_without_sidebar.html" %}
+{% endif %}
+
+{% from "posts/post_body.html" import make_post %}
+
+{% block content %}
+    {{ make_post(post) }}
+{% endblock %}

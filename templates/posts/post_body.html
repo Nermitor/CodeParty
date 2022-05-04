@@ -21,7 +21,7 @@
             </div>
         </div>
         <br><br>
-        <h2 style="text-align: center">{{ post.title }}</h2>
+        <h2 style="text-align: center"><a href="/post{{ post.id }}">{{ post.title }}</a></h2>
         <h6>{{ post.language.full_name }}</h6>
         <pre><code class="language-{{ post.language.special_name }}">{{ post.code }}</code></pre>
         <br>

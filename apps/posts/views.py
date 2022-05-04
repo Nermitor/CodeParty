@@ -33,3 +33,10 @@ def new_post():
             db_sess.commit()
         return redirect("/profile/")
     return render_template("posts/new_post.html", form=form)
+
+
+@posts.route('/post<post_id>')
+def post(post_id):
+    with db_session.create_session() as db_sess:
+        cur_post = db_sess.query(Post).get(post_id)
+        return render_template("posts/post.html", post=cur_post)
