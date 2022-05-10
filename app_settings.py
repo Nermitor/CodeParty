@@ -3,7 +3,6 @@ from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from config import BaseConfig
 import locale
-# import apps
 from flask_restful import reqparse, abort, Api, Resource
 
 locale.setlocale(
