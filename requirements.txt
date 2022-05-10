@@ -6,3 +6,4 @@ sqlalchemy
 werkzeug
 alembic
 python-dotenv
+flask-mail
