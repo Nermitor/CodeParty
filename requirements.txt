@@ -1,8 +1,8 @@
-flask
+flask~=1.1.2
 flask_login
-wtforms
-itsdangerous
-sqlalchemy
-werkzeug
-alembic
-python-dotenv
+wtforms~=3.0.1
+itsdangerous~=2.0.1
+sqlalchemy~=1.4.22
+werkzeug~=2.0.2
+alembic~=1.7.7
+python-dotenv~=0.20.0
